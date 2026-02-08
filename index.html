@@ -3,134 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>ATTA PATHAN VIP v7.0</title>
+    <title>ATTA PATHAN VIP v7.5 - ALL FIXED</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
     
     <style>
-        body { background-color: #000; color: #00ff00; font-family: 'Share Tech Mono', monospace; margin: 0; overflow: hidden; }
+        body { background-color: #000; color: #00ff00; font-family: 'Share Tech Mono', monospace; margin: 0; overflow-x: hidden; }
         canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.2; }
         
-        /* Hacker Entrance Overlay */
-        #entrance {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 500; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; transition: 1s;
-        }
-        .scan-line { width: 200px; height: 2px; background: #0f0; box-shadow: 0 0 20px #0f0; animation: scan 2s infinite; }
-        @keyframes scan { 0% { transform: translateY(0); } 50% { transform: translateY(200px); } 100% { transform: translateY(0); } }
-        
-        /* Main UI */
-        #main-ui { display: none; opacity: 0; transition: 1.5s; height: 100vh; overflow-y: auto; }
-        
-        .vip-card {
-            background: rgba(0, 40, 0, 0.6); border: 1px solid #00ff00;
-            border-radius: 12px; transition: 0.4s; cursor: pointer; text-align: center;
-        }
-        .vip-card:hover { transform: scale(1.05); box-shadow: 0 0 25px #00ff00; background: rgba(0, 255, 0, 0.1); }
-        
-        .cyber-map { width: 100%; height: 150px; background: url('https://upload.wikimedia.org/wikipedia/commons/8/87/World_map_blank_without_borders.svg') no-repeat center; background-size: contain; opacity: 0.3; filter: invert(1) sepia(1) saturate(5) hue-rotate(90deg); position: relative; }
-        
-        .ping { position: absolute; width: 4px; height: 4px; background: #0f0; border-radius: 50%; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); opacity: 1; } 100% { transform: scale(10); opacity: 0; } }
+        /* Hacker Scan Entrance */
+        #entrance { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+        .scan-line { width: 100%; height: 3px; background: #0f0; position: absolute; top: 0; animation: scan 2s infinite linear; box-shadow: 0 0 15px #0f0; }
+        @keyframes scan { 0% { top: 0; } 100% { top: 100%; } }
 
-        .ticker-wrap { background: rgba(0, 255, 0, 0.1); border-bottom: 1px solid #00ff00; padding: 5px; overflow: hidden; }
-        .ticker { display: inline-block; white-space: nowrap; animation: ticker 30s linear infinite; font-size: 10px; }
-        @keyframes ticker { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        /* Main Styles */
+        #main-ui { display: none; }
+        .vip-card { background: rgba(0, 30, 0, 0.7); border: 1px solid #00ff00; border-radius: 12px; transition: 0.3s; cursor: pointer; text-align: center; padding: 20px; }
+        .vip-card:hover { box-shadow: 0 0 20px #00ff00; transform: translateY(-5px); }
+        .vip-page { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: #000; z-index: 100; padding: 20px; overflow-y: auto; }
+        
+        input, textarea { background: #001100 !important; border: 1px solid #00ff00 !important; color: #0f0 !important; padding: 12px; border-radius: 8px; width: 100%; margin-bottom: 10px; outline: none; }
+        .btn-neon { border: 1px solid #00ff00; color: #00ff00; padding: 10px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; }
+        .btn-neon:hover { background: #00ff00; color: #000; }
     </style>
 </head>
 <body>
 
     <canvas id="matrix"></canvas>
 
-    <div id="entrance">
-        <div class="mb-10 text-center">
-            <h2 class="text-2xl font-bold tracking-[10px] text-green-500 mb-2">SECURE ACCESS</h2>
-            <p class="text-[8px] text-gray-500">ENCRYPTION: AES-256 BIT</p>
+    <div id="entrance" onclick="grantAccess()">
+        <div class="relative w-40 h-52 border-2 border-green-500 rounded-lg overflow-hidden">
+            <div class="scan-line"></div>
+            <i class="fas fa-fingerprint text-8xl text-green-500 opacity-30 mt-12 block text-center"></i>
         </div>
-        <div class="relative w-48 h-48 border-2 border-green-900 flex items-center justify-center rounded-xl overflow-hidden cursor-pointer" onclick="grantAccess()">
-            <div class="scan-line absolute top-0"></div>
-            <i class="fas fa-fingerprint text-8xl text-green-800 opacity-50"></i>
-            <p class="absolute bottom-4 text-[10px] animate-pulse">HOLD TO SCAN</p>
-        </div>
-        <p class="mt-8 text-xs text-green-500 font-mono" id="scan-status">WAITING FOR BIOMETRIC...</p>
+        <p class="mt-6 animate-pulse font-bold tracking-widest text-green-500">TAP TO SCAN FINGERPRINT</p>
     </div>
 
     <div id="main-ui">
-        <div class="ticker-wrap">
-            <div class="ticker uppercase">
-                ⚠️ ATTA PATHAN VIP SYSTEM BYPASSED... ENCRYPTED DATA STREAMING... 💀 BIN GEN: ONLINE... ⚡ SIM DB: SYNCED... 🚀 DARK MODE ACTIVE...
-            </div>
-        </div>
+        <div class="p-6 text-center">
+            <h1 class="text-4xl font-black text-green-500 mb-2 italic" style="font-family: 'Orbitron';">ATTA PATHAN VIP</h1>
+            <p class="text-[9px] tracking-[5px] text-white opacity-40 mb-10">ELITE SECURITY SYSTEM</p>
 
-        <div class="p-6">
-            <div class="cyber-map mb-4">
-                <div class="ping" style="top: 20%; left: 30%;"></div>
-                <div class="ping" style="top: 50%; left: 70%;"></div>
-                <div class="ping" style="top: 40%; left: 50%;"></div>
-            </div>
+            <div class="grid grid-cols-2 gap-4 max-w-4xl mx-auto">
+                <div class="vip-card" onclick="window.location.href='https://pakhtoon9900.github.io/atta-database/'">
+                    <i class="fas fa-database text-3xl text-blue-500 mb-2"></i>
+                    <p class="text-[10px] font-bold">SIM DATABASE</p>
+                </div>
+                
+                <div class="vip-card" onclick="openPage('ai-page')">
+                    <i class="fas fa-robot text-3xl text-cyan-400 mb-2"></i>
+                    <p class="text-[10px] font-bold">ATTA AI</p>
+                </div>
 
-            <div class="text-center mb-10">
-                <h1 class="text-4xl font-black text-green-500 uppercase tracking-widest italic" style="font-family: 'Orbitron';">ATTA PATHAN</h1>
-                <p class="text-[8px] tracking-[6px] text-white opacity-40">GOVERNMENT GRADE EXPLOIT SYSTEM</p>
-            </div>
+                <div class="vip-card" onclick="openPage('bin-page')">
+                    <i class="fas fa-credit-card text-3xl text-emerald-500 mb-2"></i>
+                    <p class="text-[10px] font-bold">BIN GENERATOR</p>
+                </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
-                <div class="vip-card p-6" onclick="window.location.href='https://pakhtoon9900.github.io/atta-database/'">
-                    <i class="fas fa-database text-3xl mb-2 text-blue-500"></i>
-                    <h3 class="text-[10px] font-bold">SIM DATABASE</h3>
+                <div class="vip-card" onclick="openPage('unban-page')">
+                    <i class="fab fa-whatsapp text-3xl text-green-500 mb-2"></i>
+                    <p class="text-[10px] font-bold">WA UNBAN</p>
                 </div>
-                <div class="vip-card p-6" onclick="openPage('cc-page')">
-                    <i class="fas fa-credit-card text-3xl mb-2 text-emerald-500"></i>
-                    <h3 class="text-[10px] font-bold">BIN GENERATOR</h3>
-                </div>
-                <div class="vip-card p-6" onclick="openPage('unban-page')">
-                    <i class="fab fa-whatsapp text-3xl mb-2 text-green-500"></i>
-                    <h3 class="text-[10px] font-bold">WA UNBAN</h3>
-                </div>
-                <div class="vip-card p-6" onclick="openPage('ai-page')">
-                    <i class="fas fa-robot text-3xl mb-2 text-cyan-400"></i>
-                    <h3 class="text-[10px] font-bold">ATTA AI</h3>
-                </div>
-                <div class="vip-card p-6" onclick="openPage('trick-page')">
-                    <i class="fas fa-phone-volume text-3xl mb-2 text-yellow-500"></i>
-                    <h3 class="text-[10px] font-bold">CALL TRICK</h3>
-                </div>
-                <div class="vip-card p-6" onclick="window.location.href='https://t.me/Atta_87bot'">
-                    <i class="fab fa-telegram-plane text-3xl mb-2 text-sky-400"></i>
-                    <h3 class="text-[10px] font-bold">SUPPORT</h3>
-                </div>
-            </div>
 
-            <div class="mt-10 p-4 bg-green-900/10 border border-green-900 rounded-lg font-mono text-[9px] text-green-700 h-24 overflow-hidden">
-                <div id="log-content"></div>
+                <div class="vip-card" onclick="openPage('trick-page')">
+                    <i class="fas fa-phone-volume text-3xl text-yellow-500 mb-2"></i>
+                    <p class="text-[10px] font-bold">CALL TRICK</p>
+                </div>
+
+                <div class="vip-card" onclick="window.location.href='https://t.me/Atta_87bot'">
+                    <i class="fab fa-telegram-plane text-3xl text-sky-400 mb-2"></i>
+                    <p class="text-[10px] font-bold">TELEGRAM</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <audio id="main-audio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
+    <div id="ai-page" class="vip-page">
+        <button onclick="closePage('ai-page')" class="mb-5"><i class="fas fa-arrow-left text-2xl"></i></button>
+        <h2 class="text-xl text-center text-cyan-400 mb-5">ATTA AI CORE</h2>
+        <div id="chat-box" class="h-64 border border-cyan-900 p-3 text-xs overflow-y-auto mb-4"></div>
+        <div class="flex gap-2"><input id="ai-q" placeholder="Ask something..."><button onclick="askAI()" class="btn-neon w-20">GO</button></div>
+    </div>
+
+    <div id="bin-page" class="vip-page">
+        <button onclick="closePage('bin-page')" class="mb-5"><i class="fas fa-arrow-left text-2xl"></i></button>
+        <h2 class="text-xl text-center text-emerald-500 mb-5">BIN GENERATOR</h2>
+        <input id="bin-v" placeholder="Enter BIN (e.g. 414720)">
+        <button onclick="genBIN()" class="btn-neon mb-4">GENERATE</button>
+        <textarea id="bin-res" rows="8" readonly></textarea>
+    </div>
+
+    <div id="unban-page" class="vip-page">
+        <button onclick="closePage('unban-page')" class="mb-5"><i class="fas fa-arrow-left text-2xl"></i></button>
+        <h2 class="text-xl text-center text-green-500 mb-5">WA UNBAN TOOL</h2>
+        <input id="wa-n" placeholder="Banned Number (+92...)">
+        <button onclick="genUnban()" class="btn-neon mb-4">GENERATE APPEAL</button>
+        <textarea id="wa-res" rows="6"></textarea>
+        <button onclick="sendMail()" class="btn-neon">SEND TO WHATSAPP</button>
+    </div>
+
+    <div id="trick-page" class="vip-page">
+        <button onclick="closePage('trick-page')" class="mb-5"><i class="fas fa-arrow-left text-2xl"></i></button>
+        <h2 class="text-xl text-center text-yellow-500 mb-5">FAKE CALL TRICK</h2>
+        <div class="text-xs p-4 border border-yellow-700">
+            1. Install 'TalkU' App from PlayStore.<br>
+            2. Use a USA VPN.<br>
+            3. Use Temp SMS for verification.<br>
+            4. Start free calling!
+        </div>
+    </div>
+
+    <audio id="bg-m" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3"></audio>
 
     <script>
-        // Access Logic
+        // Access Function
         function grantAccess() {
-            const status = document.getElementById('scan-status');
-            status.innerText = "VERIFYING BIOMETRIC...";
-            status.style.color = "#f00";
-            
+            document.getElementById('entrance').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            document.getElementById('bg-m').play();
+        }
+
+        // Navigation Fixed
+        function openPage(id) { 
+            document.getElementById('main-ui').style.display = 'none'; 
+            document.getElementById(id).style.display = 'block'; 
+        }
+        function closePage(id) { 
+            document.getElementById(id).style.display = 'none'; 
+            document.getElementById('main-ui').style.display = 'block'; 
+        }
+
+        // AI Logic
+        function askAI() {
+            const q = document.getElementById('ai-q').value;
+            const b = document.getElementById('chat-box');
+            if(!q) return;
+            b.innerHTML += `<div class='mb-2'>ME: ${q}</div>`;
             setTimeout(() => {
-                status.innerText = "ACCESS GRANTED! WELCOME BOSS ATTA.";
-                status.style.color = "#0f0";
-                setTimeout(() => {
-                    document.getElementById('entrance').style.opacity = '0';
-                    setTimeout(() => {
-                        document.getElementById('entrance').style.display = 'none';
-                        document.getElementById('main-ui').style.display = 'block';
-                        setTimeout(() => document.getElementById('main-ui').style.opacity = '1', 100);
-                        document.getElementById('main-audio').play(); // Music start
-                    }, 1000);
-                }, 1000);
-            }, 2000);
+                b.innerHTML += `<div class='text-cyan-400 mb-2'>AI: Analyzing your request... Atta Pathan server ready!</div>`;
+                b.scrollTop = b.scrollHeight;
+            }, 600);
+            document.getElementById('ai-q').value = "";
+        }
+
+        // BIN Logic
+        function genBIN() {
+            const v = document.getElementById('bin-v').value;
+            let r = "";
+            for(let i=0; i<10; i++) {
+                r += v + Math.random().toString().slice(2, 12) + "|" + "12|2027|786\n";
+            }
+            document.getElementById('bin-res').value = r;
+        }
+
+        // Unban Logic
+        function genUnban() {
+            const n = document.getElementById('wa-n').value;
+            document.getElementById('wa-res').value = "My number " + n + " is banned. Please unban it. I follow all rules.";
+        }
+        function sendMail() {
+            window.location.href = "mailto:support@whatsapp.com?body=" + encodeURIComponent(document.getElementById('wa-res').value);
         }
 
         // Matrix Rain
@@ -148,20 +181,6 @@
             });
         }
         setInterval(draw, 50);
-
-        // Terminal Logs
-        const lines = ["Initializing Atta Pathan DB...", "Connecting to Proxy...", "Bypassing Firewall...", "Syncing Bio-Data...", "Exploit Successful!"];
-        let idx = 0;
-        setInterval(() => {
-            const box = document.getElementById('log-content');
-            if(box) {
-                box.innerHTML += `<div>> ${lines[idx]}</div>`;
-                idx = (idx+1)%lines.length;
-                if(box.childNodes.length > 5) box.removeChild(box.firstChild);
-            }
-        }, 2500);
-
-        function openPage(id) { /* Navigation same as before... */ }
     </script>
 </body>
 </html>
