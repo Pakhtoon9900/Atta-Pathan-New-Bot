@@ -3,82 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atta Pathan | Digital Security</title>
+    <title>Atta Pathan Tools | Digital Hub</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #020617; color: white; font-family: 'Segoe UI', sans-serif; }
-        .glass { background: rgba(30, 41, 59, 0.7); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.1); }
-        .btn-gradient { background: linear-gradient(90deg, #0ea5e9, #6366f1); transition: 0.3s; }
-        .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(99, 102, 241, 0.4); }
+        body { background-color: #fefae0; } /* Light Cream Background like your image */
+        .tool-card { 
+            background: white; 
+            border-radius: 20px; 
+            transition: 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
+        .badge-gold { background: linear-gradient(to right, #f6d365, #fda085); color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; position: absolute; top: 10px; right: 10px; }
     </style>
 </head>
-<body class="flex items-center justify-center min-h-screen p-6">
+<body class="p-4 md:p-10 text-center text-slate-800">
 
-    <div class="glass max-w-md w-full rounded-3xl p-8 shadow-2xl border border-slate-700">
-        <div class="text-center mb-8">
-            <div class="w-20 h-20 bg-gradient-to-tr from-blue-500 to-indigo-600 rounded-2xl mx-auto flex items-center justify-center text-3xl shadow-lg rotate-3 mb-4">
-                <i class="fas fa-user-secret text-white"></i>
-            </div>
-            <h1 class="text-3xl font-extrabold tracking-tight">Atta Pathan</h1>
-            <p class="text-blue-400 text-xs font-bold uppercase tracking-widest mt-1">Digital Security Expert</p>
-        </div>
+    <h1 class="text-3xl font-extrabold text-indigo-700 uppercase tracking-tighter mb-8">
+        Atta Pathan Sigma Tools
+    </h1>
 
-        <div class="space-y-4">
-            <div class="bg-slate-800/50 p-4 rounded-2xl border border-white/5 text-center">
-                <p class="text-slate-300 text-sm mb-4 italic text-balance">
-                    Join my official community for latest security updates and tools.
-                </p>
-                <a href="https://t.me/atta_pakhtoon" target="_blank" class="block w-full btn-gradient text-white font-bold py-3 rounded-xl mb-2">
-                    <i class="fab fa-telegram-plane mr-2"></i> Join My Channel
-                </a>
-            </div>
-
-            <div class="space-y-3 mt-6">
-                <input type="text" id="userMsg" placeholder="Enter your message or number" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-sm focus:outline-none focus:border-blue-500">
-                <button onclick="sendToTelegram()" id="sendBtn" class="w-full bg-white text-slate-900 font-bold py-3 rounded-xl hover:bg-slate-200 transition">
-                    Send to Atta Pathan
-                </button>
-            </div>
-        </div>
-
-        <div class="mt-8 text-center">
-            <p class="text-slate-500 text-[10px] uppercase tracking-tighter">
-                &copy; 2026 Secured & Developed by <span class="text-slate-300 font-bold italic underline">Atta Pathan</span>
-            </p>
-        </div>
+    <div class="max-w-md mx-auto mb-10">
+        <input type="text" placeholder="Search tools..." class="w-full p-3 rounded-full border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
     </div>
 
-    <script>
-        async function sendToTelegram() {
-            const msg = document.getElementById('userMsg').value;
-            const btn = document.getElementById('sendBtn');
-            
-            if(!msg) { alert("Please enter something!"); return; }
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        
+        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
+            <span class="badge-gold font-bold">GOLD</span>
+            <i class="fas fa-camera text-4xl text-slate-700 mb-4"></i>
+            <h3 class="font-bold text-sm uppercase">Camera Hub</h3>
+        </div>
 
-            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            btn.disabled = true;
+        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
+            <span class="badge-gold font-bold">GOLD</span>
+            <i class="fas fa-map-marker-alt text-4xl text-red-500 mb-4"></i>
+            <h3 class="font-bold text-sm uppercase">Track Location</h3>
+        </div>
 
-            const token = "8108741949:AAHnnYFAWgd-Me2hy3d_9QoeN9kidTxNUJw";
-            const chat_id = "28572087";
-            const text = `🔥 NEW MESSAGE FOR ATTA PATHAN 🔥\n\nContent: ${msg}\nTime: ${new Date().toLocaleString()}`;
+        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
+            <i class="fas fa-database text-4xl text-blue-500 mb-4"></i>
+            <h3 class="font-bold text-sm uppercase">SIM Database</h3>
+        </div>
 
-            try {
-                const response = await fetch(`https://api.telegram.org/bot${token}/sendMessage?chat_id=${chat_id}&text=${encodeURIComponent(text)}`);
-                if(response.ok) {
-                    alert("Message sent to Atta Pathan successfully!");
-                    document.getElementById('userMsg').value = "";
-                } else {
-                    alert("Error sending message.");
-                }
-            } catch (err) {
-                console.error(err);
-                alert("Connection error!");
-            } finally {
-                btn.innerHTML = "Send to Atta Pathan";
-                btn.disabled = false;
-            }
-        }
-    </script>
+        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
+            <i class="fas fa-id-card text-4xl text-indigo-600 mb-4"></i>
+            <h3 class="font-bold text-sm uppercase">CNIC Details</h3>
+        </div>
+
+        <div onclick="window.location.href='https://t.me/atta_pakhtoon'" class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100 cursor-pointer bg-indigo-50">
+            <i class="fab fa-telegram text-4xl text-indigo-500 mb-4"></i>
+            <h3 class="font-bold text-sm uppercase">Support Bot</h3>
+        </div>
+
+    </div>
+
+    <footer class="mt-20 text-slate-400 text-xs font-bold uppercase tracking-widest">
+        Made with ❤️ by Atta Pathan
+    </footer>
+
 </body>
 </html>
