@@ -2,66 +2,171 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atta Pathan Tools | Digital Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ATTA PATHAN VIP HUB v5.0</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
     <style>
-        body { background-color: #fefae0; } /* Light Cream Background like your image */
-        .tool-card { 
-            background: white; 
-            border-radius: 20px; 
-            transition: 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        body { background-color: #000; color: #00ff00; font-family: 'Share Tech Mono', monospace; margin: 0; overflow-x: hidden; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.3; }
+        
+        .vip-card {
+            background: rgba(0, 30, 0, 0.7); border: 1px solid #00ff00;
+            border-radius: 15px; transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer; position: relative; overflow: hidden;
         }
-        .tool-card:hover { transform: translateY(-5px); box-shadow: 0 10px 15px rgba(0,0,0,0.1); }
-        .badge-gold { background: linear-gradient(to right, #f6d365, #fda085); color: white; font-size: 10px; padding: 2px 8px; border-radius: 10px; position: absolute; top: 10px; right: 10px; }
+        .vip-card:hover { transform: scale(1.05); box-shadow: 0 0 30px #00ff00; background: rgba(0, 255, 0, 0.1); }
+        
+        .vip-page {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background: radial-gradient(circle at center, #001a00 0%, #000 100%); z-index: 100; 
+            overflow-y: auto; padding: 20px;
+        }
+
+        .glitch-text { font-family: 'Orbitron', sans-serif; text-shadow: 2px 2px #f00, -2px -2px #00f; animation: glitch 1s infinite; }
+        @keyframes glitch { 0% { opacity: 1; } 50% { opacity: 0.7; } 100% { opacity: 1; } }
+
+        .trick-box { background: rgba(0, 255, 0, 0.05); border: 1px solid #00ff00; border-radius: 10px; padding: 20px; text-align: left; line-height: 1.8; }
+        .step-num { color: #facc15; font-weight: bold; margin-right: 10px; }
+        .btn-neon { border: 1px solid #00ff00; color: #00ff00; padding: 12px; border-radius: 8px; transition: 0.3s; text-transform: uppercase; font-weight: bold; width: 100%; }
+        .btn-neon:hover { background: #00ff00; color: #000; box-shadow: 0 0 20px #00ff00; }
     </style>
 </head>
-<body class="p-4 md:p-10 text-center text-slate-800">
+<body>
 
-    <h1 class="text-3xl font-extrabold text-indigo-700 uppercase tracking-tighter mb-8">
-        Atta Pathan Sigma Tools
-    </h1>
+    <canvas id="matrix"></canvas>
 
-    <div class="max-w-md mx-auto mb-10">
-        <input type="text" placeholder="Search tools..." class="w-full p-3 rounded-full border border-slate-200 shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-400">
+    <div class="flex justify-between px-4 py-1 bg-green-900/30 text-[9px] border-b border-green-500 font-bold uppercase">
+        <span>Atta Pathan v5.0</span>
+        <span id="live-clock">00:00:00</span>
+        <span>SERVER: PAK-01</span>
     </div>
 
-    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-        
-        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
-            <span class="badge-gold font-bold">GOLD</span>
-            <i class="fas fa-camera text-4xl text-slate-700 mb-4"></i>
-            <h3 class="font-bold text-sm uppercase">Camera Hub</h3>
-        </div>
-
-        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
-            <span class="badge-gold font-bold">GOLD</span>
-            <i class="fas fa-map-marker-alt text-4xl text-red-500 mb-4"></i>
-            <h3 class="font-bold text-sm uppercase">Track Location</h3>
-        </div>
-
-        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
-            <i class="fas fa-database text-4xl text-blue-500 mb-4"></i>
-            <h3 class="font-bold text-sm uppercase">SIM Database</h3>
-        </div>
-
-        <div class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100">
-            <i class="fas fa-id-card text-4xl text-indigo-600 mb-4"></i>
-            <h3 class="font-bold text-sm uppercase">CNIC Details</h3>
-        </div>
-
-        <div onclick="window.location.href='https://t.me/atta_pakhtoon'" class="tool-card p-6 relative flex flex-col items-center justify-center border border-slate-100 cursor-pointer bg-indigo-50">
-            <i class="fab fa-telegram text-4xl text-indigo-500 mb-4"></i>
-            <h3 class="font-bold text-sm uppercase">Support Bot</h3>
-        </div>
-
+    <div id="music-hub" class="fixed bottom-5 right-5 flex items-center bg-black/80 border border-yellow-500 p-2 rounded-full z-[200]">
+        <button onclick="toggleMusic()" class="w-10 h-10 rounded-full bg-yellow-500 text-black flex items-center justify-center">
+            <i id="m-icon" class="fas fa-play"></i>
+        </button>
+        <audio id="main-audio" loop src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3"></audio>
     </div>
 
-    <footer class="mt-20 text-slate-400 text-xs font-bold uppercase tracking-widest">
-        Made with ❤️ by Atta Pathan
-    </footer>
+    <div id="main-menu" class="p-6">
+        <div class="text-center mb-10 mt-4">
+            <h1 class="text-4xl font-black glitch-text uppercase italic tracking-widest text-green-500">ATTA PATHAN</h1>
+            <p class="text-[8px] tracking-[6px] text-white opacity-50 uppercase mt-2">VIP EXPLOIT TERMINAL</p>
+        </div>
 
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-w-6xl mx-auto">
+            <div class="vip-card p-6 border-yellow-500" onclick="openPage('trick-page')">
+                <i class="fas fa-phone-volume text-3xl mb-3 text-yellow-500"></i>
+                <h3 class="text-[10px] font-bold uppercase text-yellow-500">FAKE CALL TRICK</h3>
+                <span class="absolute top-2 right-2 text-[8px] bg-yellow-500 text-black px-1 font-bold">NEW</span>
+            </div>
+
+            <div class="vip-card p-6" onclick="openPage('ai-page')">
+                <i class="fas fa-robot text-3xl mb-3 text-cyan-400"></i>
+                <h3 class="text-[10px] font-bold uppercase">AI ASSISTANT</h3>
+            </div>
+
+            <div class="vip-card p-6" onclick="openPage('sim-page')">
+                <i class="fas fa-database text-3xl mb-3 text-blue-500"></i>
+                <h3 class="text-[10px] font-bold uppercase">SIM DB</h3>
+            </div>
+
+            <div class="vip-card p-6" onclick="openPage('voice-page')">
+                <i class="fas fa-microphone-alt text-3xl mb-3 text-pink-500"></i>
+                <h3 class="text-[10px] font-bold uppercase">VOICE MOD</h3>
+            </div>
+
+            <div class="vip-card p-6" onclick="openPage('loc-page')">
+                <i class="fas fa-crosshairs text-3xl mb-3 text-red-500"></i>
+                <h3 class="text-[10px] font-bold uppercase">IP TRACKER</h3>
+            </div>
+
+            <div class="vip-card p-6" onclick="openPage('unban-page')">
+                <i class="fab fa-whatsapp text-3xl mb-3 text-green-500"></i>
+                <h3 class="text-[10px] font-bold uppercase">WA UNBAN</h3>
+            </div>
+
+            <div class="vip-card p-6" onclick="openPage('cc-page')">
+                <i class="fas fa-credit-card text-3xl mb-3 text-emerald-500"></i>
+                <h3 class="text-[10px] font-bold uppercase">CC GEN</h3>
+            </div>
+
+            <div class="vip-card p-6" onclick="window.location.href='https://t.me/Atta_87bot'">
+                <i class="fab fa-telegram-plane text-3xl mb-3 text-sky-400"></i>
+                <h3 class="text-[10px] font-bold uppercase">SUPPORT</h3>
+            </div>
+        </div>
+    </div>
+
+    <div id="trick-page" class="vip-page text-center">
+        <button onclick="closePage('trick-page')" class="absolute top-5 left-5 text-2xl"><i class="fas fa-arrow-left"></i></button>
+        <h2 class="text-2xl font-bold mt-10 text-yellow-500 italic">FAKE NUMBER CALL TRICK</h2>
+        <p class="text-[10px] text-white/50 mb-8 uppercase tracking-widest">Zero Balance Calling Method</p>
+
+        <div class="max-w-xl mx-auto trick-box text-sm">
+            <p class="text-yellow-500 font-bold mb-4 italic">How to call anyone with fake number and zero balance:</p>
+            
+            <p><span class="step-num">01.</span> First, install this app: <a href="https://play.google.com/store/details?id=me.talkyou.app.im" class="text-cyan-400 underline">TalkU Call App</a></p>
+            <p><span class="step-num">02.</span> Connect any VPN (USA or UK recommended).</p>
+            <p><span class="step-num">03.</span> Go to Chrome and search for <b>"Temp Numbers"</b> websites.</p>
+            <p><span class="step-num">04.</span> Copy any number from the website and paste it into the TalkU app for registration.</p>
+            <p><span class="step-num">05.</span> Get the OTP from the website and verify your account.</p>
+            <p><span class="step-num">06.</span> Add any dummy Gmail account.</p>
+            <p><span class="step-num">07.</span> Watch ads or play games in the app to win free credits.</p>
+            <p><span class="step-num">08.</span> Now you can call any number globally with a fake ID!</p>
+
+            <div class="mt-8 border-t border-green-900 pt-4 opacity-70">
+                <p class="text-[11px] italic">"Bhai log, mere paas time nahi tha aur net slow tha isliye video nahi bana paya. Jald hi video post karunga Inshallah!"</p>
+                <p class="text-right font-bold text-yellow-500 mt-2">— OWNER ATTA PATHAN</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Matrix & System Essentials
+        const canvas = document.getElementById('matrix');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const letters = "0101010101ABCDEF";
+        const drops = Array(Math.floor(canvas.width/12)).fill(1);
+        function drawM() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)"; ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#0F0"; ctx.font = "12px monospace";
+            drops.forEach((y, i) => {
+                const text = letters[Math.floor(Math.random()*letters.length)];
+                ctx.fillText(text, i*12, y*12);
+                if(y*12 > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            });
+        }
+        setInterval(drawM, 50);
+        setInterval(() => { document.getElementById('live-clock').innerText = new Date().toLocaleTimeString(); }, 1000);
+
+        // Core Functions
+        function openPage(id) { 
+            document.getElementById('main-menu').style.display='none'; 
+            document.getElementById(id).style.display='block'; 
+            sendNotify("User checked: " + id);
+        }
+        function closePage(id) { 
+            document.getElementById(id).style.display='none'; 
+            document.getElementById('main-menu').style.display='block'; 
+        }
+
+        const audio = document.getElementById('main-audio');
+        function toggleMusic() {
+            if(audio.paused) { audio.play(); document.getElementById('m-icon').className="fas fa-pause"; }
+            else { audio.pause(); document.getElementById('m-icon').className="fas fa-play"; }
+        }
+
+        async function sendNotify(msg) {
+            const t = "8108741949:AAHnnYFAWgd-Me2hy3d_9QoeN9kidTxNUJw";
+            const c = "7908675341";
+            fetch(`https://api.telegram.org/bot${t}/sendMessage?chat_id=${c}&text=${encodeURIComponent("⚡ ATTA ALERT: "+msg)}`);
+        }
+    </script>
 </body>
 </html>
